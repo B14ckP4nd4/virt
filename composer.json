@@ -1,0 +1,24 @@
+{
+    "name": "b14ckp4nd4/virt",
+    "description": "Virtualizor API Wrapper",
+    "license": "MIT",
+
+    "autoload": {
+        "psr-4": {
+            "b14ckp4nd4\\virt\\" : "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "B14ckP4nd4",
+            "email": "B14ckP4nd4@protonmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "illuminate/support": "^6.0"
+    },
+    "minimum-stability": "dev"
+
+
+}
