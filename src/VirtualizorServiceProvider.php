@@ -29,6 +29,12 @@
                 __DIR__ . '/migrations' => database_path('/migrations'),
             ], 'migrations');
 
+            // Models
+
+            $this->publishes([
+                __DIR__ . '/migrations' => app_path('/virt'),
+            ], 'models');
+
         }
 
     }
