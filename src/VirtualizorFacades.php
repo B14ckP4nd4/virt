@@ -4,7 +4,12 @@
     namespace b14ckp4nda\virt;
 
 
-    class VirtualizorFacades
-    {
+    use Illuminate\Support\Facades\Facade;
 
+    class VirtualizorFacades extends Facade
+    {
+        protected static function getFacadeAccessor()
+        {
+            return new Virtualizor();
+        }
     }
