@@ -1,7 +1,7 @@
 <?php
 
 
-    namespace b14ckp4nda\virt;
+    namespace blackpanda\virt;
 
 
     use Illuminate\Support\ServiceProvider;
@@ -26,13 +26,19 @@
             // Migrations
 
             $this->publishes([
-                __DIR__ . '/migrations' => database_path('/migrations'),
+                __DIR__ . '/../publishes/migrations' => database_path('/migrations'),
             ], 'migrations');
 
             // Models
 
             $this->publishes([
-                __DIR__ . '/migrations' => app_path('/virt'),
+                __DIR__ . '/../publishes/models' => app_path('/virt'),
+            ], 'models');
+
+            // Factories
+
+            $this->publishes([
+                __DIR__ . '/../publishes/factories' => database_path('/factories'),
             ], 'models');
 
         }

@@ -27,6 +27,7 @@ class CreateVPStable extends Migration
 
             $table->foreign('server_id')->references('id')->on('servers');
             $table->foreign('ip_id')->references('id')->on('vps_ips');
+            $table->foreign('os_id')->references('id')->on('vps_oses');
         });
     }
 

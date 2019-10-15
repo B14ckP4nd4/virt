@@ -11,4 +11,8 @@
         protected $table = 'vps_oses';
 
         protected $guarded = ['id'];
+
+        public function server(){
+            $this->belongsTo(Server::class,'server_id');
+        }
     }

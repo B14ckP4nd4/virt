@@ -1,7 +1,7 @@
 <?php
 
 
-    namespace b14ckp4nda\virt;
+    namespace blackpanda\virt;
 
 
     use Illuminate\Support\Facades\Facade;
