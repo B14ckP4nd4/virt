@@ -16,16 +16,17 @@ class CreateVPStable extends Migration
         Schema::create('vps', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('server_id');
-            $table->unsignedBigInteger('vps_id');
-            $table->string('vps_name');
-            $table->string('hostname');
-            $table->unsignedInteger('os_id');
-            $table->unsignedInteger('plan_id');
-            $table->text('root_pass');
-            $table->unsignedBigInteger('ip');
+            $table->unsignedBigInteger('vps_id')->nullable();
+            $table->unsignedBigInteger('ip_id');
+            $table->string('vps_name')->nullable();
+            $table->string('hostname')->nullable();
+            $table->unsignedInteger('os_id')->nullable();
+            $table->unsignedInteger('plan_id')->nullable();
+            $table->text('root_pass')->nullable();
             $table->timestamps();
 
             $table->foreign('server_id')->references('id')->on('servers');
+            $table->foreign('ip_id')->references('id')->on('vps_ips');
         });
     }
 
@@ -36,6 +37,6 @@ class CreateVPStable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('v_p_stable');
+        Schema::dropIfExists('vps');
     }
 }
