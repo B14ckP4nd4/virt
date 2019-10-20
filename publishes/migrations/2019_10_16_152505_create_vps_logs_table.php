@@ -4,7 +4,7 @@
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Support\Facades\Schema;
 
-    class CreateVPSLOGTable extends Migration
+    class CreateVpsLogsTable extends Migration
     {
         /**
          * Run the migrations.
@@ -25,8 +25,8 @@
                 $table->timestamps();
 
 
-                $table->foreign('server_id')->references('id')->on('servers');
-                $table->foreign('vps_id')->references('id')->on('vps');
+                $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');
+                $table->foreign('vps_id')->references('id')->on('vps')->onDelete('cascade');
             });
         }
 

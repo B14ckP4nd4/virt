@@ -15,4 +15,5 @@
         public function server(){
             $this->belongsTo(Server::class,'server_id');
         }
+
     }

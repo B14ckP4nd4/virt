@@ -22,7 +22,7 @@ class CreateIPtables extends Migration
             $table->timestamp('last_use')->nullable();
             $table->timestamps();
 
-            $table->foreign('server_id')->references('id')->on('servers');
+            $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');
         });
     }
 

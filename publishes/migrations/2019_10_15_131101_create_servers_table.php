@@ -18,8 +18,11 @@ class CreateServersTable extends Migration
             $table->string('name')->nullable();
             $table->string('domain');
             $table->ipAddress('ip')->unique();
+            $table->unsignedBigInteger('port')->default(4085);
             $table->string('key');
             $table->string('pass');
+            $table->string('licence_key')->nullable();
+            $table->timestamp('licence_expire')->nullable();
             $table->string('dataCenter')->nullable();
             $table->unsignedInteger('payment');
             $table->double('price',8,3);

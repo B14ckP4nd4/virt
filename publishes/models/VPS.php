@@ -32,4 +32,9 @@
             return $this->hasMany(VpsAction::class,'vps_id');
         }
 
+        public function plan()
+        {
+            return $this->hasOne(Plans::class , 'plan_id');
+        }
+
     }

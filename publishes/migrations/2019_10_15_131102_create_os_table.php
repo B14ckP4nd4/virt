@@ -22,7 +22,7 @@ class CreateOSTable extends Migration
             $table->integer('filename')->default(0);
             $table->timestamps();
 
-            $table->foreign('server_id')->references('id')->on('servers');
+            $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');
         });
     }
 
