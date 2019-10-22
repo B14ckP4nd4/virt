@@ -46,6 +46,12 @@
                 __DIR__ . '/../publishes/factories' => database_path('/factories'),
             ], 'models');
 
+            // Config
+
+            $this->publishes([
+                __DIR__ . '/../publishes/configs' => config_path('/'),
+            ], 'config');
+
         }
 
     }
