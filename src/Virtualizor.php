@@ -66,11 +66,10 @@
 
             $response = curl_exec($ch);
 
-            dd($response);
             $http_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
             curl_close($ch);
 
-            return (isJson($response)) ? json_decode($response , true) : false;
+            return $response;
 
         }
 

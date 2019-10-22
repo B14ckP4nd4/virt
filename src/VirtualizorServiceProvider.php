@@ -4,6 +4,7 @@
     namespace blackpanda\virt;
 
 
+    use Illuminate\Foundation\AliasLoader;
     use Illuminate\Support\ServiceProvider;
 
     class VirtualizorServiceProvider extends ServiceProvider
@@ -16,6 +17,9 @@
             $this->app->bind('virtualizor',function (){
                 return new Virtualizor();
             });
+
+            $loader = AliasLoader::getInstance();
+            $loader->alias('Virtualizor','blackpanda\virt\VirtualizorFacades');
         }
 
 
