@@ -10,6 +10,6 @@
     {
         protected static function getFacadeAccessor()
         {
-            return 'virtualizor';
+            return Virtualizor::class;
         }
     }

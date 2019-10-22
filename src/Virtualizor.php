@@ -5,6 +5,7 @@
 
 
     use App\virt\Server;
+    use Illuminate\Support\Collection;
     use Illuminate\Support\Str;
 
     class Virtualizor
@@ -25,12 +26,61 @@
             $this->server = $server;
         }
 
-        public function listVirtualServers()
+        public function setServer(Server $server)
         {
-            return $this->sendRequest('vs');
+            $this->ip = $server->ip;
+            $this->port = (!empty($server->port)) ? config('virtualizor.default_port') : $server->port;
+            $this->key = $server->key;
+            $this->pass = $server->pass;
+            $this->server = $server;
+            return $this;
         }
 
-        protected function sendRequest($action, array $params = [], array $GET = [] , array $COOKIES = [])
+        public function listVirtualServers(array $search = []) : Collection
+        {
+            $items = new Collection();
+            $list = $this->sendRequest('vs',$search);
+            $list = $this->decodeResult($list);
+            if($list && isset($list->vs))
+            {
+                foreach ($list->vs as $vps){
+                    $items->add($vps);
+                }
+            }
+            return $items;
+        }
+
+        public function findVPS(int $vpsid)
+        {
+            return $this->listVirtualServers(['vpsid' => $vpsid]);
+        }
+
+        public function whereVPS(array $params)
+        {
+            return $this->listVirtualServers($params);
+        }
+
+        public function createVPS(array $params)
+        {
+            $params['virt'] = ( !isset($params['virt']) )? config('virtualizor.default_virtualization') : $params['virt'];
+            $params['rootpass'] = ( !isset($params['virt']) )? config('virtualizor.default_root_pass') : $params['rootpass'];
+            $add = $this->sendRequest('addvs',$params);
+            return $this->decodeResult($add);
+        }
+
+        public function deleteVPS(int $vpsid)
+        {
+            $delete = $this->sendRequest('vs',['delete' => $vpsid]);
+            $delete = $this->decodeResult($delete);
+            if($delete && isset($delete->done) && $delete->done)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        protected function sendRequest($action, array $params = [], array $GET = [], array $COOKIES = [])
         {
             $ch = curl_init();
             $GET = array_merge(
@@ -55,7 +105,7 @@
                 curl_setopt($ch, CURLOPT_COOKIE, http_build_query($cookies, '', '; '));
             }
             // Params
-            if(!empty($params)){
+            if (!empty($params)) {
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
             }
@@ -66,16 +116,26 @@
 
             $response = curl_exec($ch);
 
-            $http_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
             return $response;
 
         }
 
-        private function generateAPIKey(){
+        private function generateAPIKey()
+        {
             $key = Str::random(8);
             return $key . md5($this->pass . $key);
+        }
+
+        private function decodeResult(string $json){
+            $json = json_decode($json);
+            if(json_last_error() == JSON_ERROR_NONE)
+            {
+                return $json;
+            }
+            return false;
         }
 
 

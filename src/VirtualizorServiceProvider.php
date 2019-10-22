@@ -4,6 +4,7 @@
     namespace blackpanda\virt;
 
 
+    use App\virt\Server;
     use Illuminate\Foundation\AliasLoader;
     use Illuminate\Support\ServiceProvider;
 
