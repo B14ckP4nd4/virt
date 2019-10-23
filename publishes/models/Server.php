@@ -17,7 +17,7 @@
             return $this->hasMany(VPS::class,'server_id');
         }
 
-        public function ip()
+        public function ips()
         {
             return $this->hasMany(IP::class,'server_id');
         }

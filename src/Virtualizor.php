@@ -5,8 +5,8 @@
 
 
     use App\virt\Server;
-    use Faker\Generator;
     use Illuminate\Support\Collection;
+    use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Str;
 
     class Virtualizor
@@ -26,7 +26,7 @@
             $this->key = $server->key;
             $this->pass = $server->pass;
             $this->server = $server;
-            $this->default_password = ( config('virtualizor.default_root_pass') ) ? config('virtualizor.default_root_pass') : Generator::password(10,12);
+            $this->default_password = ( config('virtualizor.default_root_pass') ) ? config('virtualizor.default_root_pass') : Hash::make(Str::random(8));
         }
 
         public function setServer(Server $server)
@@ -43,14 +43,7 @@
         {
             $items = new Collection();
             $list = $this->sendRequest('vs',$search);
-            $list = $this->decodeResult($list);
-            if($list && isset($list->vs))
-            {
-                foreach ($list->vs as $vps){
-                    $items->add($vps);
-                }
-            }
-            return $items;
+            return ($list && isset($list->vs)) ? new Collection($list->vs) : new Collection();
         }
 
         public function findVPS(int $vpsid)
@@ -70,18 +63,35 @@
             $params['uid'] = ( !isset($params['uid']) )? $this->server->admin_user_id : $params['uid'];
             $params['plid'] = ( !isset($params['plid']) )? $this->server->main_plan_id : $params['plid'];
             $add = $this->sendRequest('addvs',$params);
-            return $this->decodeResult($add);
+            return $add;
         }
 
         public function deleteVPS(int $vpsid)
         {
             $delete = $this->sendRequest('vs',['delete' => $vpsid]);
-            $delete = $this->decodeResult($delete);
-            if($delete && isset($delete->done) && $delete->done)
-            {
-                return true;
-            }
-            return false;
+            return ( $delete && isset($delete->done) && $delete->done );
+        }
+
+        public function listIPs()
+        {
+            $list = $this->sendRequest('ips',['reslen'=> 999]);
+            $items = (isset($list->ips)) ? new Collection($list->ips) : new Collection();
+            return $items;
+        }
+
+        public function OSTemplates()
+        {
+            $list = $this->sendRequest('ostemplates');
+            $items = (isset($list->ostemplates)) ? new Collection($list->ostemplates) : new Collection();
+            return $items;
+        }
+
+
+        public function listPlans()
+        {
+            $list = $this->sendRequest('	plans',['reslen'=> 999]);
+            $items = (isset($list->plans)) ? new Collection($list->plans) : new Collection();
+            return $items;
         }
 
 
@@ -124,7 +134,8 @@
             $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
-            return $response;
+
+            return $this->decodeResult($response);
 
         }
 

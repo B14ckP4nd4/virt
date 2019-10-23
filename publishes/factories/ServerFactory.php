@@ -16,7 +16,7 @@
             'key' => $faker->password,
             'pass' => $faker->password,
             'licence_key' => $faker->password,
-            'licence_expire' => $faker->numberBetween(0,30),
+            'licence_expire' => $faker->dateTime(),
             'dataCenter' => $faker->name,
             'payment' => $faker->numberBetween(0,30),
             'price' => $faker->numberBetween(0,30),

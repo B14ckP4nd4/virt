@@ -4,6 +4,7 @@
     namespace App\virt;
 
 
+    use App\Events\virt\VpsHasBeenDeleted;
     use Illuminate\Database\Eloquent\Model;
 
     class VPS extends Model
@@ -11,6 +12,15 @@
         protected $table = 'vps';
 
         protected $guarded = ['id'];
+
+        protected $dispatchesEvents = [
+            'deleted' => VpsHasBeenDeleted::class,
+        ];
+
+        public static function boot()
+        {
+            parent::boot();
+        }
 
         public function server()
         {
