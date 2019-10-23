@@ -1,6 +1,5 @@
 <?php
 
-    $faker = new \Faker\Generator();
     return [
         /*
          * Default Port For Connect To Virtualizor
@@ -10,7 +9,7 @@
         /*
          * Default Password for create new VPS
          */
-        'default_root_pass' => env('virt_pass', $faker->password(10,12)),
+        'default_root_pass' => env('virt_pass' , null),
 
         /*
          * Default Virtualization for create new VPS

@@ -19,6 +19,8 @@ class CreateServersTable extends Migration
             $table->string('domain');
             $table->ipAddress('ip')->unique();
             $table->unsignedBigInteger('port')->default(4085);
+            $table->unsignedBigInteger('admin_user_id');
+            $table->unsignedBigInteger('main_plan_id');
             $table->string('key');
             $table->string('pass');
             $table->string('licence_key')->nullable();

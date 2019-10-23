@@ -5,6 +5,7 @@
 
 
     use App\virt\Server;
+    use Faker\Generator;
     use Illuminate\Support\Collection;
     use Illuminate\Support\Str;
 
@@ -16,6 +17,7 @@
         protected $key;
         protected $pass;
         protected $server;
+        protected $default_password;
 
         public function __construct(Server $server)
         {
@@ -24,6 +26,7 @@
             $this->key = $server->key;
             $this->pass = $server->pass;
             $this->server = $server;
+            $this->default_password = ( config('virtualizor.default_root_pass') ) ? config('virtualizor.default_root_pass') : Generator::password(10,12);
         }
 
         public function setServer(Server $server)
@@ -63,7 +66,9 @@
         public function createVPS(array $params)
         {
             $params['virt'] = ( !isset($params['virt']) )? config('virtualizor.default_virtualization') : $params['virt'];
-            $params['rootpass'] = ( !isset($params['virt']) )? config('virtualizor.default_root_pass') : $params['rootpass'];
+            $params['rootpass'] = ( !isset($params['virt']) )? $this->default_password : $params['rootpass'];
+            $params['uid'] = ( !isset($params['uid']) )? $this->server->admin_user_id : $params['uid'];
+            $params['plid'] = ( !isset($params['plid']) )? $this->server->main_plan_id : $params['plid'];
             $add = $this->sendRequest('addvs',$params);
             return $this->decodeResult($add);
         }
