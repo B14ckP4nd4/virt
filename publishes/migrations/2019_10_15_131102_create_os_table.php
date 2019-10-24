@@ -19,7 +19,7 @@ class CreateOSTable extends Migration
             $table->unsignedBigInteger('server_id');
             $table->string('name')->nullable();
             $table->string('type')->nullable();
-            $table->integer('filename')->default(0);
+            $table->string('filename')->default(0);
             $table->timestamps();
 
             $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');

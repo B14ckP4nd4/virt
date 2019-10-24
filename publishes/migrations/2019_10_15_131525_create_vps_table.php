@@ -23,6 +23,7 @@ class CreateVPStable extends Migration
             $table->unsignedBigInteger('os_id');
             $table->unsignedBigInteger('plan_id');
             $table->string('root_pass')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');

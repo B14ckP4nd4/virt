@@ -17,7 +17,7 @@ class CreatePlansTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('plan_id');
             $table->unsignedBigInteger('server_id');
-            $table->unsignedBigInteger('name');
+            $table->string('name');
             $table->integer('space')->nullable();
             $table->integer('ram')->nullable();
             $table->integer('swap')->nullable();

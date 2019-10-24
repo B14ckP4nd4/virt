@@ -6,9 +6,13 @@
 
     use App\Events\virt\VpsHasBeenDeleted;
     use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\SoftDeletes;
 
     class VPS extends Model
     {
+
+        use SoftDeletes;
+
         protected $table = 'vps';
 
         protected $guarded = ['id'];

@@ -82,8 +82,7 @@
         public function OSTemplates()
         {
             $list = $this->sendRequest('ostemplates');
-            $items = (isset($list->ostemplates)) ? new Collection($list->ostemplates) : new Collection();
-            return $items;
+            return (isset($list->ostemplates)) ? new Collection($list->ostemplates) : new Collection();
         }
 
 

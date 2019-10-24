@@ -15,7 +15,7 @@ class CreateIPtables extends Migration
     {
         Schema::create('vps_ips', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('ip_id')->unique();
+            $table->unsignedBigInteger('ip_id');
             $table->unsignedBigInteger('server_id');
             $table->ipAddress('ip')->unique();
             $table->ipAddress('gateway');
