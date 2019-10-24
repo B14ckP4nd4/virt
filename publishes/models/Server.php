@@ -4,6 +4,7 @@
     namespace App\virt;
 
 
+    use App\Events\virt\newServerHasbeenAdded;
     use Illuminate\Database\Eloquent\Model;
 
     class Server extends Model
@@ -11,6 +12,10 @@
         protected $table = 'servers';
 
         protected $guarded = ['id'];
+
+        protected $dispatchesEvents = [
+            'created' => newServerHasbeenAdded::class,
+        ];
 
         public function vps()
         {
