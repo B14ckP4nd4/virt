@@ -23,11 +23,11 @@
             $removeUnExistedOS = OS::where('server_id',$event->server->id)->whereNotIn('os_id',$ActiveOSIDs)->delete();
 
             // Update OS List
-            foreach ($ActiveOSList as $os)
+            foreach ($ActiveOSList as $id => $os)
             {
                 OS::updateOrCreate([
                     'server_id' => $event->server->id,
-                    'os_id' => $os->osid,
+                    'os_id' => $id,
                     'name' => $os->name,
                     'type' => $os->type,
                     'filename' => $os->filename,
