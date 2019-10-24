@@ -4,7 +4,11 @@
     namespace blackpanda\virt;
 
 
+    use App\virt\IP;
+    use App\virt\OS;
+    use App\virt\Plans;
     use App\virt\Server;
+    use App\virt\VPS;
     use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Str;
@@ -32,10 +36,11 @@
         public function setServer(Server $server)
         {
             $this->ip = $server->ip;
-            $this->port = (!empty($server->port)) ? config('virtualizor.default_port') : $server->port;
+            $this->port = $server->port;
             $this->key = $server->key;
             $this->pass = $server->pass;
             $this->server = $server;
+            $this->default_password = ( config('virtualizor.default_root_pass') ) ? config('virtualizor.default_root_pass') : Hash::make(Str::random(8));
             return $this;
         }
 
@@ -56,14 +61,27 @@
             return $this->listVirtualServers($params);
         }
 
-        public function createVPS(array $params)
+        public function createVPS(array $params , $store = true)
         {
             $params['virt'] = ( !isset($params['virt']) )? config('virtualizor.default_virtualization') : $params['virt'];
             $params['rootpass'] = ( !isset($params['virt']) )? $this->default_password : $params['rootpass'];
             $params['uid'] = ( !isset($params['uid']) )? $this->server->admin_user_id : $params['uid'];
             $params['plid'] = ( !isset($params['plid']) )? $this->server->main_plan_id : $params['plid'];
-            $add = $this->sendRequest('addvs',$params);
-            return $add;
+            $newVPS = $this->sendRequest('addvs',$params);
+            if($newVPS && isset($newVPS->done) && $store)
+            {
+                VPS::create([
+                    'server_id' => $this->server->id,
+                    'vps_id' => $newVPS->newvs->vpsid,
+                    'ip_id' => $this->getIPId($newVPS->newvs),
+                    'vps_name' => $newVPS->newvs->vps_name,
+                    'hostname' => $newVPS->newvs->hostname,
+                    'os_id' => $this->getOSid($newVPS->newvs),
+                    'plan_id' => $this->getPlanId($newVPS->newvs),
+                    'root_pass' => $newVPS->newvs->pass,
+                ]);
+            }
+            return $newVPS;
         }
 
         public function deleteVPS(int $vpsid)
@@ -84,7 +102,6 @@
             $list = $this->sendRequest('ostemplates');
             return (isset($list->ostemplates)) ? new Collection($list->ostemplates) : new Collection();
         }
-
 
         public function listPlans()
         {
@@ -151,6 +168,29 @@
                 return $json;
             }
             return false;
+        }
+
+        private function getIPId($vps){
+
+
+            return IP::where([
+                [ 'server_id' , '=' ,  $this->server->id ],
+                [ 'ip' , '=' ,  $vps->ips[0] ],
+            ])->first()->id;
+        }
+
+        private function getOSid($vps){
+            return OS::where([
+                [ 'server_id' , '=' ,  $this->server->id ],
+                [ 'os_id' , '=' ,  $vps->osid ],
+            ])->first()->id;
+        }
+
+        private function getPlanId($vps){
+            return Plans::where([
+                [ 'server_id' , '=' ,  $this->server->id ],
+                [ 'plan_id' , '=' ,  $vps->plid ],
+            ])->first()->id;
         }
 
 
