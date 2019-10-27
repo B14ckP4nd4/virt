@@ -67,6 +67,7 @@
             $params['rootpass'] = ( !isset($params['virt']) )? $this->default_password : $params['rootpass'];
             $params['uid'] = ( !isset($params['uid']) )? $this->server->admin_user_id : $params['uid'];
             $params['plid'] = ( !isset($params['plid']) )? $this->server->main_plan_id : $params['plid'];
+            $params['addvps'] = ( !isset($params['addvps']) )? 1 : $params['addvps'];
             $newVPS = $this->sendRequest('addvs',$params);
             if($newVPS && isset($newVPS->done) && $store)
             {
@@ -110,6 +111,91 @@
             return $items;
         }
 
+        public function startVPS(int $vpsid)
+        {
+            $request = $this->sendRequest('vs',[],[
+                'action' => 'start',
+                'vpsid' => $vpsid,
+            ]);
+
+            return ( isset($request->done) && $request->done ) ? true : false ;
+        }
+
+        public function stopVPS(int $vpsid)
+        {
+            $request = $this->sendRequest('vs',[],[
+                'action' => 'stop',
+                'vpsid' => $vpsid,
+            ]);
+
+            return ( isset($request->done) && $request->done ) ? true : false ;
+        }
+
+        public function restartVPS(int $vpsid)
+        {
+            $request = $this->sendRequest('vs',[],[
+                'action' => 'restart',
+                'vpsid' => $vpsid,
+            ]);
+
+            // return ( isset($request->done) && $request->done ) ? true : false ;
+
+            return true;
+        }
+
+        public function powerOffVPS(int $vpsid)
+        {
+            $request = $this->sendRequest('vs',[],[
+                'action' => 'poweroff',
+                'vpsid' => $vpsid,
+            ]);
+
+            return ( isset($request->done) && $request->done ) ? true : false ;
+        }
+
+        public function suspendVPS(int $vpsid)
+        {
+            $request = $this->sendRequest('vs',[],[
+                'suspend' => $vpsid,
+            ]);
+
+            return ( isset($request->done) && $request->done == 1 ) ? true : false ;
+        }
+
+        public function unSuspendVPS(int $vpsid)
+        {
+            $request = $this->sendRequest('vs',[],[
+                'unsuspend' => $vpsid,
+            ]);
+
+            return ( isset($request->done) && $request->done == 1 ) ? true : false ;
+        }
+
+
+        public function networkSuspend(int $vpsid)
+        {
+            $request = $this->sendRequest('vs',[],[
+                'suspend_net' => $vpsid,
+            ]);
+
+            return ( isset($request->done) && $request->done == 1 ) ? true : false ;
+        }
+
+        public function networkUnSuspend(int $vpsid)
+        {
+            $request = $this->sendRequest('vs',[],[
+                'unsuspend_net' => $vpsid,
+            ]);
+
+            return ( isset($request->done) && $request->done == 1 ) ? true : false ;
+        }
+
+
+        public function listStorages()
+        {
+//            $list = $this->sendRequest('storage',)
+        }
+
 
         protected function sendRequest($action, array $params = [], array $GET = [], array $COOKIES = [])
         {
@@ -128,6 +214,7 @@
             // Turn off the server and peer verification (TrustManager Concept).
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch, CURLOPT_TIMEOUT_MS, 2000);
             // UserAgent
             curl_setopt($ch, CURLOPT_USERAGENT, 'BlackPanda Virtualizor');
             // Cookies
