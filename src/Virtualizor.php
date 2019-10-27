@@ -22,6 +22,7 @@
         protected $pass;
         protected $server;
         protected $default_password;
+        protected $spaceLimit;
 
         public function __construct(Server $server)
         {
@@ -31,6 +32,15 @@
             $this->pass = $server->pass;
             $this->server = $server;
             $this->default_password = ( config('virtualizor.default_root_pass') ) ? config('virtualizor.default_root_pass') : Hash::make(Str::random(8));
+            $this->spaceLimit = ( config('virtualizor.space_limit') ) ? config('virtualizor.space_limit') : 15 ;
+        }
+
+        public function _setDefaultPassword(string $defaultPassword) : void {
+            $this->default_password = $defaultPassword;
+        }
+
+        public function _setSpaceLimit(int $spaceLimit) : void {
+            $this->spaceLimit = $spaceLimit;
         }
 
         public function setServer(Server $server)
@@ -61,15 +71,26 @@
             return $this->listVirtualServers($params);
         }
 
-        public function createVPS(array $params , $store = true)
+        public function createVPS(array $params , $save = true , $chooseBestStorage = true)
         {
+            // Set Params For Creation
             $params['virt'] = ( !isset($params['virt']) )? config('virtualizor.default_virtualization') : $params['virt'];
             $params['rootpass'] = ( !isset($params['virt']) )? $this->default_password : $params['rootpass'];
             $params['uid'] = ( !isset($params['uid']) )? $this->server->admin_user_id : $params['uid'];
             $params['plid'] = ( !isset($params['plid']) )? $this->server->main_plan_id : $params['plid'];
             $params['addvps'] = ( !isset($params['addvps']) )? 1 : $params['addvps'];
+            if( $chooseBestStorage )
+            {
+                $bestStorage = $this->bestStorageForCreateVPS();
+                $params['stid'] = ( $bestStorage ) ? $bestStorage->first()->stid : false;
+                if(!$params['stid']) return false;
+
+            }
+
+
+            // Start Create VPS
             $newVPS = $this->sendRequest('addvs',$params);
-            if($newVPS && isset($newVPS->done) && $store)
+            if($newVPS && isset($newVPS->done) && $save)
             {
                 VPS::create([
                     'server_id' => $this->server->id,
@@ -138,6 +159,7 @@
                 'vpsid' => $vpsid,
             ]);
 
+            // timeout problem , cuz restart process need many time
             // return ( isset($request->done) && $request->done ) ? true : false ;
 
             return true;
@@ -171,7 +193,6 @@
             return ( isset($request->done) && $request->done == 1 ) ? true : false ;
         }
 
-
         public function networkSuspend(int $vpsid)
         {
             $request = $this->sendRequest('vs',[],[
@@ -193,7 +214,28 @@
 
         public function listStorages()
         {
-//            $list = $this->sendRequest('storage',)
+            $list = $this->sendRequest('storage',['reslen' => 999]);
+            return (isset($list->storage)) ? $list->storage : false;
+        }
+
+        public function bestStorageForCreateVPS()
+        {
+            $list = $this->listStorages();
+
+            if(!$list && !isset($list->storage)) return false;
+
+            $storages = new Collection();
+
+            foreach ($list as $items)
+            {
+                $storages->add($items);
+            }
+
+            $maxFree = $storages->max(function ($item){return $item->free;});
+
+            if($maxFree >= $this->spaceLimit ) return $storages->where('free','=',$maxFree);
+
+            return false;
         }
 
 
@@ -214,7 +256,7 @@
             // Turn off the server and peer verification (TrustManager Concept).
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-            curl_setopt($ch, CURLOPT_TIMEOUT_MS, 2000);
+            curl_setopt($ch, CURLOPT_TIMEOUT_MS, 9000);
             // UserAgent
             curl_setopt($ch, CURLOPT_USERAGENT, 'BlackPanda Virtualizor');
             // Cookies
