@@ -1,6 +1,6 @@
 {
     "name": "b14ckp4nd4/virt",
-    "version" : "beta.1.0.0",
+    "version" : "1.0.0.beta",
     "description": "Virtualizor API Wrapper",
     "license": "MIT",
 
