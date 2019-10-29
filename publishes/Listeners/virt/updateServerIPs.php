@@ -5,9 +5,17 @@
 
 
     use App\virt\IP;
+    use Illuminate\Bus\Queueable;
+    use Illuminate\Contracts\Queue\ShouldQueue;
+    use Illuminate\Queue\InteractsWithQueue;
 
-    class updateServerIPs
+    class updateServerIPs implements ShouldQueue
     {
+
+        use Queueable , InteractsWithQueue;
+
+        public $delay = 5;
+        public $tries = 5;
 
         public function __construct()
         {
@@ -16,8 +24,15 @@
 
         public function handle($event)
         {
+            // Get IPS
             $server = $event->server;
             $IPlist = app()->make('Virtualizor')::setServer($server)->listIPs();
+
+            // if IPs List in false
+
+            if(!$IPlist && $this->attempts() < $this->tries) $this->release($this->delay);
+
+
             // remove Difference
 
             $activeIDs = $IPlist->map(function($ip){return $ip->ipid;})->toArray();

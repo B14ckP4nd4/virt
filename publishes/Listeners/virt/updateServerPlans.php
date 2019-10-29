@@ -6,10 +6,19 @@
 
     use App\virt\OS;
     use App\virt\Plans;
+    use Illuminate\Bus\Queueable;
+    use Illuminate\Contracts\Queue\ShouldQueue;
+    use Illuminate\Queue\InteractsWithQueue;
 
-    class updateServerPlans
+    class updateServerPlans implements ShouldQueue
     {
+
+        use Queueable , InteractsWithQueue;
+        public $delay = 5;
+        public $tries = 5;
+
         private $server;
+
         public function __construct()
         {
 
@@ -17,8 +26,13 @@
 
         public function handle($event)
         {
+            // Get Plans list
             $server = $this->server = $event->server;
             $ActivePlans = app()->make('Virtualizor')::setServer($server)->listPlans();
+
+
+            // if IPs List in false
+            if(!$ActivePlans && $this->attempts() < $this->tries) $this->release($this->delay);
 
             // Remove UnExisted Plans
             $ActivePlansIDs = $ActivePlans->map(function($plan){return $plan->plid;})->toArray();

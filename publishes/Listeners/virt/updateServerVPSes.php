@@ -8,9 +8,15 @@
     use App\virt\OS;
     use App\virt\Plans;
     use App\virt\VPS;
+    use Illuminate\Bus\Queueable;
+    use Illuminate\Contracts\Queue\ShouldQueue;
+    use Illuminate\Queue\InteractsWithQueue;
 
-    class updateServerVPSes
+    class updateServerVPSes implements ShouldQueue
     {
+        use Queueable , InteractsWithQueue;
+        public $delay = 5;
+        public $tries = 5;
 
         private $server;
         public function __construct()
@@ -20,9 +26,13 @@
 
         public function handle($event)
         {
+            // Get Active Virtual Servers
             $server = $this->server = $event->server;
-
             $virtualServersList =  app()->make('Virtualizor')::setServer($server)->listVirtualServers();
+
+            // try if Active Servers dosn't set
+            if(!$virtualServersList && $this->attempts() < $this->tries) $this->release($this->delay);
+
 
             // remove Difference ( Soft Delete )
             $virtualServerListIDs = $virtualServersList->map(function($vps){return $vps->vpsid;})->toArray();

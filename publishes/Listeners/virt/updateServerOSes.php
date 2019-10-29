@@ -5,9 +5,16 @@
 
 
     use App\virt\OS;
+    use Illuminate\Bus\Queueable;
+    use Illuminate\Contracts\Queue\ShouldQueue;
+    use Illuminate\Queue\InteractsWithQueue;
 
-    class updateServerOSes
+    class updateServerOSes implements ShouldQueue
     {
+        use Queueable , InteractsWithQueue;
+        public $delay = 5;
+        public $tries = 5;
+
         public function __construct()
         {
 
@@ -15,8 +22,13 @@
 
         public function handle($event)
         {
+            // Get Active OSes
             $server = $event->server;
             $ActiveOSList = app()->make('Virtualizor')::setServer($server)->OSTemplates();
+
+            // Retry if OSes list Doen't Set
+
+            if(!$ActiveOSList && $this->attempts() < $this->tries) $this->release($this->delay);
 
             // remove Difference ( Soft Delete )
             $ActiveOSIDs = $ActiveOSList->map(function($os , $osID){return $osID;})->sort()->toArray();
