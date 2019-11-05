@@ -1,12 +1,11 @@
 {
-    "name": "b14ckp4nd4/virt",
-    "version" : "1.0.0.beta",
+    "name": "blackpanda/virt",
+    "version" : "1.0.0",
     "description": "Virtualizor API Wrapper",
     "license": "MIT",
-
     "autoload": {
         "psr-4": {
-            "b14ckp4nd4\\virt\\" : "src/"
+            "blackpanda\\virt\\" : "src/"
         }
     },
     "authors": [
