@@ -19,7 +19,7 @@
         "illuminate/support": "^6.0",
         "ext-curl": "*"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 
 
 }
