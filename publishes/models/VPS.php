@@ -4,12 +4,18 @@
     namespace App\virt;
 
 
+    use App\EncryptorTraits\Encryptable;
     use App\Events\virt\VpsHasBeenDeleted;
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\SoftDeletes;
 
     class VPS extends Model
     {
+        use Encryptable;
+
+        protected $encryptable = [
+            'root_pass',
+        ];
 
         use SoftDeletes;
 
