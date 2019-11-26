@@ -36,37 +36,37 @@
 
             $this->publishes([
                 __DIR__ . '/../publishes/migrations' => database_path('/migrations'),
-            ], 'migrations');
+            ], 'Virt-migrations');
 
             // Models
 
             $this->publishes([
                 __DIR__ . '/../publishes/models' => app_path('/virt'),
-            ], 'models');
+            ], 'Virt-models');
 
             // Factories
 
             $this->publishes([
                 __DIR__ . '/../publishes/factories' => database_path('/factories'),
-            ], 'models');
+            ], 'Virt-models');
 
             // Config
 
             $this->publishes([
                 __DIR__ . '/../publishes/configs' => config_path('/'),
-            ], 'config');
+            ], 'Virt-config');
 
             // Events
 
             $this->publishes([
                 __DIR__ . '/../publishes/Events' => app_path('/Events'),
-            ], 'events');
+            ], 'Virt-events');
 
             // Events
 
             $this->publishes([
                 __DIR__ . '/../publishes/Listeners' => app_path('/Listeners'),
-            ], 'events');
+            ], 'Virt-events');
 
         }
 
