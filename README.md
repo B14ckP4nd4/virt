@@ -1,4 +1,4 @@
-# Virtualizor Wrapper
+# Virtualizor API Wrapper
 
 ### **Install** ( laravel 6+ && PHP 7.2+ Required )
 
