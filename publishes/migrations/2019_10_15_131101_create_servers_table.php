@@ -26,6 +26,7 @@ class CreateServersTable extends Migration
             $table->string('licence_key')->nullable();
             $table->timestamp('licence_expire')->nullable();
             $table->string('dataCenter')->nullable();
+            $table->string('location')->nullable();
             $table->unsignedInteger('payment');
             $table->double('price',8,3);
             $table->timestamps();
