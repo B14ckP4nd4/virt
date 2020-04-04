@@ -132,6 +132,14 @@
             return $items;
         }
 
+
+        public function listUsers()
+        {
+            $list = $this->sendRequest('	users',['reslen'=> 999]);
+            $items = (isset($list->users)) ? new Collection($list->users) : new Collection();
+            return $items;
+        }
+
         public function startVPS(int $vpsid)
         {
             $request = $this->sendRequest('vs',[],[
