@@ -15,13 +15,12 @@
     class updateServerVPSes implements ShouldQueue
     {
         use Queueable , InteractsWithQueue;
-        public $delay = 5;
         public $tries = 5;
 
         private $server;
         public function __construct()
         {
-
+            $this->delay = 5;
         }
 
         public function handle($event)
