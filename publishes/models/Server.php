@@ -18,7 +18,7 @@
             'licence_key',
         ];
 
-        protected $table = 'servers';
+        protected $table = 'virt_server';
 
         protected $guarded = ['id'];
 

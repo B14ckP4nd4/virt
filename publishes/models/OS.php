@@ -8,7 +8,7 @@
 
     class OS extends Model
     {
-        protected $table = 'vps_oses';
+        protected $table = 'virt_oses';
 
         protected $guarded = ['id'];
 

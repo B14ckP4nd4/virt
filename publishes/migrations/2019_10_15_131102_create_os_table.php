@@ -13,7 +13,7 @@ class CreateOSTable extends Migration
      */
     public function up()
     {
-        Schema::create('vps_oses', function (Blueprint $table) {
+        Schema::create('virt_oses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('os_id');
             $table->unsignedBigInteger('server_id');

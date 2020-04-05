@@ -13,7 +13,7 @@ class CreateVPStable extends Migration
      */
     public function up()
     {
-        Schema::create('vps', function (Blueprint $table) {
+        Schema::create('virt_vps', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('server_id');
             $table->unsignedBigInteger('vps_id')->nullable();

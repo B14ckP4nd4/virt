@@ -8,7 +8,7 @@
 
     class Logs extends Model
     {
-        protected $table = 'vps_logs';
+        protected $table = 'virt_logs';
 
         protected $guarded = ['id'];
 

@@ -8,7 +8,7 @@
 
     class Plans extends Model
     {
-        protected $table = 'vps_plans';
+        protected $table = 'virt_plans';
 
         protected $guarded = ['id'];
 

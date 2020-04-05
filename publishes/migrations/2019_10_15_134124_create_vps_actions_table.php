@@ -13,7 +13,7 @@ class CreateVpsActionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('vps_actions', function (Blueprint $table) {
+        Schema::create('virt_actions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('vps_id');
             $table->string('action');

@@ -8,7 +8,7 @@
 
     class VpsAction extends Model
     {
-        protected $table = 'vps_actions';
+        protected $table = 'virt_actions';
 
         protected $guarded = ['id'];
 

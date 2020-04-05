@@ -13,7 +13,7 @@ class CreatePlansTable extends Migration
      */
     public function up()
     {
-        Schema::create('vps_plans', function (Blueprint $table) {
+        Schema::create('virt_plans', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('plan_id');
             $table->unsignedBigInteger('server_id');

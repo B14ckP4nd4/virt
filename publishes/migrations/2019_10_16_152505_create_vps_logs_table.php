@@ -13,7 +13,7 @@
          */
         public function up()
         {
-            Schema::create('vps_logs', function (Blueprint $table) {
+            Schema::create('virt_logs', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->unsignedBigInteger('server_id');
                 $table->unsignedBigInteger('vps_id');

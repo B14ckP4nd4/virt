@@ -8,7 +8,7 @@
 
     class IP extends Model
     {
-        protected $table = 'vps_ips';
+        protected $table = 'virt_ips';
 
         protected $guarded = ['id'];
 

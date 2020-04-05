@@ -19,7 +19,7 @@
 
         use SoftDeletes;
 
-        protected $table = 'vps';
+        protected $table = 'virt_vps';
 
         protected $guarded = ['id'];
 
