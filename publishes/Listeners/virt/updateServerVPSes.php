@@ -66,16 +66,27 @@
                 [ 'os_id' , '=' ,  $vps->osid ],
             ])->first();
 
-            return ( $OS ) ? $OS->id : 0;
+            $unknownOS = OS::where([
+                [ 'server_id' , '=' ,  $this->server->id ],
+                [ 'os_id' , '=' ,  0 ],
+            ])->first();
+
+            return ( $OS ) ? $OS->id : $unknownOS->id;
         }
 
         private function getPlanId($vps){
+
             $plan = Plans::where([
                 [ 'server_id' , '=' ,  $this->server->id ],
                 [ 'plan_id' , '=' ,  $vps->plid ],
             ])->first();
 
-            return ( $plan ) ? $plan->id : 0;
+            $defaultPlan = Plans::where([
+                [ 'server_id' , '=' ,  $this->server->id ],
+                [ 'plan_id' , '=' ,  0 ],
+            ])->first();
+
+            return ( $plan ) ? $plan->id : $defaultPlan->id;
         }
 
     }
