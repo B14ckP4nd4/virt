@@ -26,8 +26,8 @@ class CreatePlansTable extends Migration
             $table->unsignedBigInteger('os_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');
-            $table->foreign('os_id')->references('id')->on('vps_oses')->onDelete('cascade');
+            $table->foreign('server_id')->references('id')->on('virt_server')->onDelete('cascade');
+            $table->foreign('os_id')->references('id')->on('virt_oses')->onDelete('cascade');
         });
     }
 
@@ -38,6 +38,6 @@ class CreatePlansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vps_plans');
+        Schema::dropIfExists('virt_plans');
     }
 }

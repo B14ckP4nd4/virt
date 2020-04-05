@@ -23,7 +23,7 @@ class CreateIPtables extends Migration
             $table->timestamp('last_use')->nullable();
             $table->timestamps();
 
-            $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');
+            $table->foreign('server_id')->references('id')->on('virt_server')->onDelete('cascade');
         });
     }
 
@@ -34,6 +34,6 @@ class CreateIPtables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vps_ips');
+        Schema::dropIfExists('virt_ips');
     }
 }

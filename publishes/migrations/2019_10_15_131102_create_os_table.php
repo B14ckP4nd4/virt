@@ -22,7 +22,7 @@ class CreateOSTable extends Migration
             $table->string('filename')->default(0);
             $table->timestamps();
 
-            $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');
+            $table->foreign('server_id')->references('id')->on('virt_server')->onDelete('cascade');
         });
     }
 
@@ -33,6 +33,6 @@ class CreateOSTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vps_oses');
+        Schema::dropIfExists('virt_oses');
     }
 }

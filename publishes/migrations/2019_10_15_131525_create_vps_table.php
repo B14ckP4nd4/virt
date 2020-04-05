@@ -26,10 +26,10 @@ class CreateVPStable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');
-            $table->foreign('ip_id')->references('id')->on('vps_ips')->onDelete('cascade');
-            $table->foreign('os_id')->references('id')->on('vps_oses')->onDelete('cascade');
-            $table->foreign('plan_id')->references('id')->on('vps_plans')->onDelete('cascade');
+            $table->foreign('server_id')->references('id')->on('virt_server')->onDelete('cascade');
+            $table->foreign('ip_id')->references('id')->on('virt_ips')->onDelete('cascade');
+            $table->foreign('os_id')->references('id')->on('virt_oses')->onDelete('cascade');
+            $table->foreign('plan_id')->references('id')->on('virt_plans')->onDelete('cascade');
         });
     }
 
@@ -40,6 +40,6 @@ class CreateVPStable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vps');
+        Schema::dropIfExists('virt_vps');
     }
 }

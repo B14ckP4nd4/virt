@@ -23,7 +23,7 @@ class CreateVpsActionsTable extends Migration
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
 
-            $table->foreign('vps_id')->references('id')->on('vps')->onDelete('cascade');
+            $table->foreign('vps_id')->references('id')->on('virt_vps')->onDelete('cascade');
         });
     }
 
@@ -34,6 +34,6 @@ class CreateVpsActionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vps_actions');
+        Schema::dropIfExists('virt_actions');
     }
 }
