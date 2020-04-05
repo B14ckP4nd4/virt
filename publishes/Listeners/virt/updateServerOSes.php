@@ -33,6 +33,15 @@
             $ActiveOSIDs = $ActiveOSList->map(function($os , $osID){return $osID;})->sort()->toArray();
             $removeUnExistedOS = OS::where('server_id',$event->server->id)->whereNotIn('os_id',$ActiveOSIDs)->delete();
 
+            // add unknown OS For Server
+            OS::updateOrCreate([
+                'server_id' => $event->server->id,
+                'os_id' => 0,
+                'name' => 'unknown',
+                'type' => 'unknown',
+                'filename' => 'unknown',
+            ]);
+
             // Update OS List
             foreach ($ActiveOSList as $id => $os)
             {

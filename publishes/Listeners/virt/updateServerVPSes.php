@@ -61,17 +61,21 @@
         }
 
         private function getOSid($vps){
-            return OS::where([
+            $OS = OS::where([
                 [ 'server_id' , '=' ,  $this->server->id ],
                 [ 'os_id' , '=' ,  $vps->osid ],
-            ])->first()->id;
+            ])->first();
+
+            return ( $OS ) ? $OS->id : 0;
         }
 
         private function getPlanId($vps){
-            return Plans::where([
+            $plan = Plans::where([
                 [ 'server_id' , '=' ,  $this->server->id ],
                 [ 'plan_id' , '=' ,  $vps->plid ],
-            ])->first()->id;
+            ])->first();
+
+            return ( $plan ) ? $plan->id : 0;
         }
 
     }
