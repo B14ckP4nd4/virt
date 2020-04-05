@@ -25,7 +25,7 @@
                 $table->timestamps();
 
 
-                $table->foreign('server_id')->references('id')->on('virt_servers')->onDelete('cascade');
+                $table->foreign('server_id')->references('id')->on('virt_server')->onDelete('cascade');
                 $table->foreign('vps_id')->references('id')->on('virt_vps')->onDelete('cascade');
             });
         }
