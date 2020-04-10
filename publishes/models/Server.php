@@ -56,5 +56,21 @@
             return ($this->admin_user_id > 0) ? true : false;
         }
 
+        public function getUnknownOS()
+        {
+            return OS::where([
+                [ 'server_id' , '=' ,  $this->id ],
+                [ 'os_id' , '=' ,  0 ],
+            ])->firstOrFail()->id;
+        }
+
+        public function getUnknownPlan()
+        {
+            return Plans::where([
+                [ 'server_id' , '=' ,  $this->id ],
+                [ 'plan_id' , '=' ,  0 ],
+            ])->firstOrFail()->id;
+        }
+
 
     }

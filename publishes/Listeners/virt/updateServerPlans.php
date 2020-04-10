@@ -37,17 +37,17 @@
             $ActivePlansIDs = $ActivePlans->map(function($plan){return $plan->plid;})->toArray();
             $removeUnExistedPlans = Plans::where('server_id',$event->server->id)->whereNotIn('plan_id',$ActivePlansIDs)->delete();
 
-            // Add known plan
+            // Add unknown plan
             Plans::updateOrCreate([
                 'server_id' => $event->server->id,
                 'plan_id' => 0,
-                'name' => 'known',
+                'name' => 'unkown',
                 'space' => 0,
                 'ram' => 0,
                 'swap' => 0,
                 'cpu' => 0,
                 'cores' => 0,
-                'os_id' => 0,
+                'os_id' => $event->server->getUnknownOS(),
             ]);
 
             // Update Plans List
